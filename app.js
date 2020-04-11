@@ -25,6 +25,7 @@ app.engine('handlebars', exphbs());
 app.set('view engine', 'handlebars');
 
 // Body parser middleware
+// Body parser: access whatever is submited.
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
@@ -44,10 +45,22 @@ app.get('/about', (req, res) => {
 
 });
 
+// Idea Index Page
+app.get('/ideas', (req, res) => {
+    Idea.find({})
+        .lean()
+        .sort({date:'desc'})
+        .then(ideas => {
+            res.render('ideas/index', {
+                ideas: ideas
+            });
+        });
+    
+});
+
 // Add idea form
 app.get('/ideas/add', (req, res) => {
     res.render('ideas/add');
-
 });
 
 // Process Form
@@ -63,19 +76,32 @@ app.post('/ideas', (req, res) => {
     }
 
     if(errors.length > 0){
+        // re render the form
         res.render('ideas/add', {
             errors: errors,
             title: req.body.title,
             details: req.body.details
         });
     } else {
+        // const newUser = {
+        //     title: req.body.title,
+        //     details: req.body.details
+        // }
+        // new Idea(newUser).save().then(idea => {
+        //     res.redirect('/ideas')
+        // })
+
+        //saving into MongoDB
         const newUser = {
             title: req.body.title,
             details: req.body.details
         }
-        new Idea(newUser).save().then(idea => {
-            res.redirect('/ideas')
+        new Idea(newUser).
+        save()
+        .then(idea => {
+            res.redirect('/ideas');
         })
+
     }
     
 } );
