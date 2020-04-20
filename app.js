@@ -11,7 +11,9 @@ mongoose.Promise = global.Promise;
 
 // Connect to mongoose
 mongoose.connect('mongodb://localhost/vidjot-dev', {
-    useNewUrlParser: true
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true
 })
 .then(() => console.log('MongoDB Connected...'))// promise
 .catch(err => console.log(err));
@@ -61,6 +63,36 @@ app.get('/ideas', (req, res) => {
 // Add idea form
 app.get('/ideas/add', (req, res) => {
     res.render('ideas/add');
+});
+
+// try {
+//     console.log("entering try block");
+//     throw "thrown message";
+//     console.log("this message is never seen");
+//   }
+//   catch (e) {
+//     console.log("entering catch block");
+//     console.log(e);
+//     console.log("leaving catch block");
+//   }
+
+// Edit idea form
+app.get('/ideas/edit/:id', (req, res) => {
+    try {
+    Idea.findOne({
+        _id: req.params.id
+    })
+    .then(idea => {
+        res.render('ideas/edit', {
+            idea : idea
+        });
+    
+    });
+} 
+catch(e){
+    console.log("entering the catch block");
+    console.log(e);
+}
 });
 
 // Process Form
