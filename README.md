@@ -12,3 +12,4 @@
  - Instalar o MongoDB e ligar
 
 - Update all dependencies
+- SQLite version?
