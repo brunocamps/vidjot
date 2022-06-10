@@ -10,3 +10,5 @@
 - Abrir o terminal do VS Code e executar:
  - `npm install`
  - Instalar o MongoDB e ligar
+
+- Update all dependencies
